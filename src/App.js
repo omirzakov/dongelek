@@ -11,6 +11,7 @@ import Login from "./components/authorization/Login";
 import PublicationForm from "./components/publication/PublicationForm";
 import Profile from "./components/profile/Profile";
 import AdminPage from "./components/admin/AdminPage";
+import CarDetail from "./components/cars/CarDetail";
 
 function App() {
     return (
@@ -48,6 +49,11 @@ function App() {
                     <Switch>
                         <Route path="/admin/" exact={true} strict={true}>
                             <AdminPage />
+                        </Route>
+                    </Switch>
+                    <Switch>
+                        <Route path="/cars/:id/" exact={true} strict={true}>
+                            <CarDetail />
                         </Route>
                     </Switch>
                 </Grid>
