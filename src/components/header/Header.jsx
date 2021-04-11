@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 import { useStyles } from "./styles";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@material-ui/core";
 import camry from "../../img/camry.png";
 import { NavLink, Link } from "react-router-dom";
 import "./style.scss";
+import { AuthContext } from "../../App";
+import { validateToken } from "../../api/login";
 
 
 
 const Header = () => {
+    const { cookie, setIsAuth, removeCookie, isAuth } = useContext(AuthContext);
     const classes = useStyles();
+
+    useEffect(async () => {
+
+        const res = await validateToken(cookie.token);
+
+        if (res.data) {
+            setIsAuth(true);
+        }
+    }, []);
 
 
     return (
@@ -34,16 +46,28 @@ const Header = () => {
                         Подать объявление
                     </NavLink>
                 </Typography>
-                <Link to="/login/" className={classes.link}>
-                    <Button color="inherit">
-                        Авторизация
-                    </Button>
-                </Link>
-                <Link to="/registration/" className={classes.link}>
-                    <Button color="inherit">
-                        Регистрация
-                    </Button>
-                </Link>
+                {
+                    isAuth && isAuth === true ?
+                        <div className="d-flex">
+                            <Link to="/profile/" className={classes.link}>
+                                <Button color="inherit">
+                                    Профиль
+                                </Button>
+                            </Link>
+                        </div> :
+                        <div className="d-flex">
+                            <Link to="/login/" className={classes.link}>
+                                <Button color="inherit">
+                                    Авторизация
+                                </Button>
+                            </Link>
+                            <Link to="/registration/" className={classes.link}>
+                                <Button color="inherit">
+                                    Регистрация
+                                </Button>
+                            </Link>
+                        </div>
+                }
             </Toolbar>
         </AppBar>
     );

@@ -30,13 +30,13 @@ const Home = () => {
                 onSwiper={(swiper) => console.log(swiper)}
                 >
                     <SwiperSlide>
-                        <img src="https://frankfurt.apollo.olxcdn.com/v1/files/ma22v3k2w5513-KZ/image;s=1000x700" style={{maxWidth:"100%"}} />
+                        <img src="https://frankfurt.apollo.olxcdn.com/v1/files/ma22v3k2w5513-KZ/image;s=1000x700" style={{maxWidth:"100%", height:"150px"}} />
                     </SwiperSlide>
                     <SwiperSlide>
-                        <img src="https://m.pln24.ru/pictures/190520093526.jpg" style={{maxWidth:"100%"}}  alt=""/>
+                        <img src="https://m.pln24.ru/pictures/190520093526.jpg" style={{maxWidth:"100%", height:"150px"}}  alt=""/>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <img src="https://frankfurt.apollo.olxcdn.com/v1/files/m11q19ailpse1-KZ/image;s=644x461" style={{maxWidth:"100%"}} alt=""/>
+                        <img src="https://frankfurt.apollo.olxcdn.com/v1/files/m11q19ailpse1-KZ/image;s=644x461" style={{maxWidth:"100%", height:"150px"}} alt=""/>
                     </SwiperSlide>
                 </Swiper>
                 <CarList />

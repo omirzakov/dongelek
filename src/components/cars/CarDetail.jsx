@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Box, Button, Grid, Paper } from "@material-ui/core";
+import "./style.scss";
 
 
 const images = [
@@ -31,7 +32,7 @@ const CarDetail = () => {
                         <Grid container>
                             {
                                 images.map((image, i) => (
-                                    <Grid item xs={3} key={i} style={{ cursor: "pointer" }} onClick={() => changeGallery(i)}>
+                                    <Grid className={i === selected && "active-gallery"} item xs={3} key={i} style={{ cursor: "pointer" }} onClick={() => changeGallery(i)}>
                                         <img src={image} style={{ maxWidth: "100%" }} />
                                     </Grid>
                                 ))
