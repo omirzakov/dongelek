@@ -8,7 +8,9 @@ import { Link } from "react-router-dom";
 const useStyles = makeStyles({
     root: {
         maxWidth: "100%",
-        marginBottom: 20
+        marginBottom: 20,
+        marginRight: 15,
+        background: "#eee"
     },
     text: {
         fontSize: 20
