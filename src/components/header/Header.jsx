@@ -23,6 +23,12 @@ const Header = () => {
         }
     }, []);
 
+    const logOut = () => {
+
+        removeCookie("token");
+        window.location.reload();
+    }
+
 
     return (
         <AppBar position="static">
@@ -52,6 +58,11 @@ const Header = () => {
                             <Link to="/profile/" className={classes.link}>
                                 <Button color="inherit">
                                     Профиль
+                                </Button>
+                            </Link>
+                            <Link to="#" onClick={logOut} className={classes.link}>
+                                <Button color="inherit">
+                                    Выйти
                                 </Button>
                             </Link>
                         </div> :
