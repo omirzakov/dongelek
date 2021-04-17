@@ -55,7 +55,7 @@ function App() {
                             </Route>
                         </Switch>
                         <Switch>
-                            <Route path="/admin/" exact={true} strict={true}>
+                            <Route path="/admin/" >
                                 <AdminPage />
                             </Route>
                         </Switch>

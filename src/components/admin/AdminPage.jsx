@@ -16,6 +16,20 @@ import CarsTable from "./cars/CarsTable";
 import { AuthContext } from '../../App';
 import { getProfile } from '../../api/user';
 import { Box, CircularProgress } from '@material-ui/core';
+import { Link, Route, Switch } from 'react-router-dom';
+import CategoriesTable from './categories/CategoriesTable';
+import CategoryEdit from './categories/CategoryEdit';
+
+const categories = [
+    {
+        name: "Категории",
+        link: '/admin/categories'
+    },
+    {
+        name: "Автомобили",
+        link: "/admin/cars"
+    }
+]
 
 const drawerWidth = 240;
 
@@ -26,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
+        zIndex: 2
     },
     drawer: {
         width: drawerWidth,
@@ -38,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
     content: {
         width: "100%",
-        minWidth: 1250,
+        minWidth: 5,
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing(3),
@@ -52,17 +67,17 @@ const AdminPage = () => {
 
 
     useEffect(async () => {
-        if(cookie.token) {
+        if (cookie.token) {
             const userInfo = await getProfile(cookie.token);
-            
+
             const isAdmin = userInfo.roles.find((role) => {
 
-                if(role.name === "ROLE_ADMIN") {
+                if (role.name === "ROLE_ADMIN") {
                     return true;
                 }
             })
 
-            if(isAdmin) {   
+            if (isAdmin) {
                 setLoader(false);
             }
             else {
@@ -78,47 +93,61 @@ const AdminPage = () => {
         <>
             {
                 loader ? <Box component="div" display="flex" margin="0 auto"><CircularProgress /></Box> :
-                <div className={classes.root}>
-                    <CssBaseline />
-                    <AppBar position="fixed" className={classes.appBar}>
-                        <Toolbar>
-                            <Typography variant="h6" noWrap>
-                                Админ панель
+                    <div className={classes.root}>
+                        <CssBaseline />
+                        <AppBar position="fixed" className={classes.appBar} style={{ zIndex: 2 }}>
+                            <Toolbar>
+                                <Typography variant="h6" noWrap>
+                                    Админ панель
                             </Typography>
-                        </Toolbar>
-                    </AppBar>
-                    <Drawer
-                        className={classes.drawer}
-                        variant="permanent"
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        anchor="left"
-                    >
-                        <div className={classes.toolbar} />
-                        <Divider />
-                        <List>
-                            {['Сообщения', 'Автомобили', 'Объявления', 'Пользователи'].map((text, index) => (
-                                <ListItem button key={text}>
-                                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItem>
-                            ))}
-                        </List>
-                        <Divider />
-                        <List>
-                            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                                <ListItem button key={text}>
-                                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Drawer>
-                    <main className={classes.content}>
-                        <CarsTable />
-                    </main>
-                </div>
+                            </Toolbar>
+                        </AppBar>
+                        <Drawer
+                            className={classes.drawer}
+                            variant="permanent"
+                            style={{ zIndex: 2 }}
+                            classes={{
+                                paper: classes.drawerPaper,
+                            }}
+                            anchor="left"
+                        >
+                            <div className={classes.toolbar} />
+                            <Divider />
+                            <List>
+                                {
+                                    categories.map((cat, i) => (
+                                    <ListItem button key={i}>
+                                        <ListItemIcon><InboxIcon /></ListItemIcon>
+                                        <ListItemText>
+                                            <Link to={cat.link}>
+                                                {cat.name}
+                                            </Link>
+                                        </ListItemText>
+                                    </ListItem>
+                                    ))
+                                }
+                            </List>
+                            <Divider />
+                            <List>
+                                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                                    <ListItem button key={text}>
+                                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                                        <ListItemText primary={text} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Drawer>
+                        <main className={classes.content}>
+                            <Switch>
+                                <Route path='/admin/categories' exact={true} strict={true}>
+                                    <CategoriesTable />
+                                </Route>
+                                <Route path='/admin/category/:id/' exact={true} strict={true}>
+                                    <CategoryEdit />
+                                </Route>
+                            </Switch>
+                        </main>
+                    </div>
             }
         </>
     );
