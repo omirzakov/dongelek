@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { Button, Label, Menu, Table } from 'semantic-ui-react';
-import { getCars, deleteCar } from '../../../api/cars';
 import DeleteItem from '../../general/DeleteItem';
 import { Link } from 'react-router-dom';
-import CarModalAdd from './CarModalAdd';
+import { deleteCarMod, getCarMods } from '../../../api/carmods';
+import CarModModalAdd from './CarModModalAdd';
 
 const btnWrapper = {
     display: "flex",
@@ -16,13 +16,14 @@ const linkColor = {
 }
 
 
-const CarsTable = () => {
-    const [cars, setCars] = useState([])
+const CarModsTable = () => {
+    const [carMods, setCarMods] = useState([])
 
     async function loadData() {
-        const res = await getCars();
-        setCars(res.data)  
+        const res = await getCarMods();
+        setCarMods(res.data)  
     }
+    
 
     useEffect(async () => {
         loadData();
@@ -33,27 +34,23 @@ const CarsTable = () => {
             <Table celled style={{ width: 800 }}>
                 <Table.Header>
                     <Table.Row>
+                        <Table.HeaderCell>№</Table.HeaderCell>
                         <Table.HeaderCell>Название</Table.HeaderCell>
-                        <Table.HeaderCell>Описание</Table.HeaderCell>
-                        <Table.HeaderCell>Логотип</Table.HeaderCell>
                         <Table.HeaderCell textAlign='center'>Управление</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
-                        cars.map((car, i) => (
-                            <Table.Row key={car.id}>
-                                <Table.Cell>{car.name}</Table.Cell>
-                                <Table.Cell>{car.description}</Table.Cell>
-                                <Table.Cell style={{display:"flex", justifyContent:"center"}}>
-                                    <img src={car.picture} alt={car.name} width="50px" />
-                                </Table.Cell>
+                        carMods.map((carmod, i) => (
+                            <Table.Row key={carmod.id}>
+                                <Table.Cell>{carmod.id}</Table.Cell>
+                                <Table.Cell>{carmod.modification}</Table.Cell>
                                 <Table.Cell width='5'>
                                     <div style={btnWrapper}>
-                                        <Link to={`/admin/cars/${car.id}/`} className={linkColor}>
+                                        <Link to={`/admin/carmods/${carmod.id}/`} className={linkColor}>
                                             Редактировать
                                     </Link>
-                                        <DeleteItem fetch={deleteCar} refetch={getCars} id={car.id} />
+                                        <DeleteItem fetch={deleteCarMod} refetch={getCarMods} id={carmod.id} />
                                     </div>
                                 </Table.Cell>
                             </Table.Row>
@@ -61,9 +58,9 @@ const CarsTable = () => {
                     }
                 </Table.Body>
             </Table>
-            <CarModalAdd loadData={loadData} />
+            <CarModModalAdd refetch={loadData} />
         </>
     );
 }
 
-export default CarsTable;
+export default CarModsTable;

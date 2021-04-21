@@ -1,30 +1,28 @@
 import React, { useState } from 'react'
 import { Button, Form, Header, Image, Modal, TextArea } from 'semantic-ui-react'
+import { addCarMod } from '../../../api/carmods';
 import { addCategory } from '../../../api/categories';
 
 const initState = {
-    name: '',
-    description: '',
-    picture: ''
+    modification: '',
 }
 
-function CategoryModalAdd() {
+function CarModModalAdd({refetch}) {
     const [open, setOpen] = useState(false)
 
-    const [category, setCategory] = useState(initState);
+    const [carMod, setCarMod] = useState(initState);
 
     const onChange = (e) => {
         const { value, name } = e.target;
 
-        setCategory({ ...category, [name]: value });
+        setCarMod({ ...carMod, [name]: value });
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await addCategory(category);
+        const res = await addCarMod(carMod);
+        refetch() 
         setOpen(false);
-        window.location.reload();   
-
     }
 
     return (
@@ -33,26 +31,15 @@ function CategoryModalAdd() {
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}
                 open={open}
-                trigger={<Button>Добавить категорию</Button>}
+                trigger={<Button>Добавить модификацию</Button>}
             >
-                <Modal.Header>Добавить категорию    </Modal.Header>
+                <Modal.Header>Добавить модификацию    </Modal.Header>
                 <Modal.Content image>
-                    <Image size='medium' src='https://lh3.googleusercontent.com/proxy/BSOYR6kSTTbvYkVKBLSYF5G0wEMuE-EvOuXOPhL8-NXA94Kh10PvhfLdkd3cVQE668GteYKcUeiaw24Wqaw' wrapped />
                     <Modal.Description style={{maxWidth: 500}}>
                         <Form onSubmit={handleSubmit} >
                             <Form.Field>
                                 <label>Название</label>
-                                <input placeholder='First Name' name='name' onChange={onChange} value={category.name} />
-                            </Form.Field>
-                            <Form.Field label="Описание"
-                                control={TextArea}
-                                name='description'
-                                onChange={onChange}
-                                value={category.description}
-                            />
-                            <Form.Field style={{ marginTop: 20 }}>
-                                <label>Фото</label>
-                                <input placeholder='First Name' name='picture' onChange={onChange} value={category.picture} />
+                                <input placeholder='First Name' name='modification' onChange={onChange} value={carMod.modification} />
                             </Form.Field>
                             <Modal.Actions>
                                 <Button color='black' onClick={() => setOpen(false)}>
@@ -74,4 +61,4 @@ function CategoryModalAdd() {
     )
 }
 
-export default CategoryModalAdd;
+export default CarModModalAdd;

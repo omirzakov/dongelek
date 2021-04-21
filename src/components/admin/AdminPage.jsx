@@ -19,7 +19,11 @@ import { Box, CircularProgress } from '@material-ui/core';
 import { Link, Route, Switch } from 'react-router-dom';
 import CategoriesTable from './categories/CategoriesTable';
 import CategoryEdit from './categories/CategoryEdit';
-
+import CarEdit from './cars/CarEdit';
+import CarModsTable from './carMods/CarModsTable';
+import CarModEdit from './carMods/CarModEdit';
+import PublicationsTable from './publications/PublicationsTable';
+import PublicationEdit from './publications/PublicationEdit'
 const categories = [
     {
         name: "Категории",
@@ -28,6 +32,14 @@ const categories = [
     {
         name: "Автомобили",
         link: "/admin/cars"
+    },
+    {
+        name: "Модификации для автомобилей",
+        link: "/admin/carmods"
+    },
+    {
+        name: "Объявления",
+        link: "/admin/publications"
     }
 ]
 
@@ -142,8 +154,26 @@ const AdminPage = () => {
                                 <Route path='/admin/categories' exact={true} strict={true}>
                                     <CategoriesTable />
                                 </Route>
+                                <Route path='/admin/cars' exact={true} strict={true}>
+                                    <CarsTable />
+                                </Route>
                                 <Route path='/admin/category/:id/' exact={true} strict={true}>
                                     <CategoryEdit />
+                                </Route>
+                                <Route path='/admin/cars/:id/' exact={true} strict={true}>
+                                    <CarEdit />
+                                </Route>
+                                <Route path='/admin/carmods' exact={true} strict={true}>
+                                    <CarModsTable />
+                                </Route>
+                                <Route path='/admin/carmods/:id/' exact={true} strict={true}>
+                                    <CarModEdit />
+                                </Route>
+                                <Route path='/admin/publications' exact={true} strict={true}>
+                                    <PublicationsTable />
+                                </Route>
+                                <Route path='/admin/publications/:id/' exact={true} strict={true}>
+                                    <PublicationEdit />
                                 </Route>
                             </Switch>
                         </main>

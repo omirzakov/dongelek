@@ -1,66 +1,65 @@
 import axios from "axios";
 import { API_URL } from "../defroutes/api";
 
-
-export function getCategories() {
-
-    return axios.get(`${API_URL}/getcategories`)
-                .then(res => {
-                    return res.data;
-                })
-                .catch(err => {
-                    console.log(err);
-                    return err;
-                })
+export function getPublications() {
+    return axios.get(`${API_URL}/getpublications`)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
-export function getCategory(id) {
+export function deletePublication(id) {
 
-    return axios.get(`${API_URL}/categories/${id}`)
-                .then(res => {
-                    return res.data;
-                })
-                .catch(err => {
-                    console.log(err);
-                    return err;
-                })
-}
-
-export function addCategory(data) {
-    data.id = null;
-
-    return axios.post(`${API_URL}/newcategory`, data)
-                .then(res => {
-                    console.log(res);
-                    return res;
-                })
-                .catch(err => {
-                    console.log(err);
-                    return err;
-                })
-}
-
-export function updateCategory(data) {
-    console.log(data)
-    return axios.put(`${API_URL}/editcategory/${data.id}`, data)
-                .then(res => {
-                    console.log(res);
-                    return res;
-                })
-                .catch(err => {
-                    console.log(err);
-                    return err;
-                })
-}
-
-export function deleteCategory(id) {
-
-    return axios.delete(`${API_URL}/deletecategory/${id}`)
+    return axios.delete(`${API_URL}/deletepublication/${id}`)
                 .then(res => {
                     return res.data;
                 })
                 .catch(err => {
                     console.log(err)
+                    return err;
+                })
+}
+
+
+export function getPublication(id) {
+
+    return axios.get(`${API_URL}/publications/${id}`)
+                .then(res => {
+                    return res;
+                })
+                .catch(err => {
+                    console.log(err);
+                    return err;
+                })
+}
+
+export function editPublication(data, token) {
+    console.log(data)
+    return axios.put(`${API_URL}/editpublication/${data.id}/${token}`, data)
+                .then(res => {
+                    console.log(res);
+                    return res;
+                })
+                .catch(err => {
+                    console.log(err);
+                    return err;
+                })
+}
+
+
+export function addPublication(data, token) {
+    data.id = null;
+
+    return axios.post(`${API_URL}/newpublication/${token}`, data)
+                .then(res => {
+                    console.log(res);
+                    return res;
+                })
+                .catch(err => {
+                    console.log(err);
                     return err;
                 })
 }

@@ -17,8 +17,7 @@ const Header = () => {
     useEffect(async () => {
 
         const res = await validateToken(cookie.token);
-
-        if (res.data) {
+        if (res != undefined && res.data) {
             setIsAuth(true);
         }
     }, []);

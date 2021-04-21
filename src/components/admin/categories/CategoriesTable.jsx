@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 
 import 'semantic-ui-css/semantic.min.css';
 import { Button, Label, Menu, Table } from 'semantic-ui-react';
-import { getCategories } from '../../../api/categories';
+import { deleteCategory, getCategories } from '../../../api/categories';
+import DeleteItem from '../../general/DeleteItem';
 import CategoryModalAdd from './CategoryModalAdd';
 
 
@@ -24,42 +25,40 @@ const CategoriesTable = () => {
         const data = await getCategories();
         setCategories(data);
         setLoading(false);
-        console.log(data)
     }, []);
 
     return (
         <>
-            <Table celled styl>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Название</Table.HeaderCell>
-                        <Table.HeaderCell>Описание</Table.HeaderCell>
-                        <Table.HeaderCell>Фото</Table.HeaderCell>
-                        <Table.HeaderCell textAlign='center'>Управление</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {
-                        categories.map((category, i) => (
-                            <Table.Row key={category.id}>
-                                <Table.Cell>{category.name}</Table.Cell>
-                                <Table.Cell>{category.description}</Table.Cell>
-                                <Table.Cell>{category.picture}</Table.Cell>
-                                <Table.Cell width='5'>
-                                    <div style={btnWrapper}>
-                                        <Button primary>
+            <div>
+                <Table celled style={{ width: 800, fontSize: "15px" }}>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Название</Table.HeaderCell>
+                            <Table.HeaderCell>Описание</Table.HeaderCell>
+                            <Table.HeaderCell>Фото</Table.HeaderCell>
+                            <Table.HeaderCell textAlign='center'>Управление</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {
+                            categories.map((category, i) => (
+                                <Table.Row key={category.id}>
+                                    <Table.Cell>{category.name}</Table.Cell>
+                                    <Table.Cell>{category.description}</Table.Cell>
+                                    <Table.Cell>{category.picture}</Table.Cell>
+                                    <Table.Cell width='5'>
+                                        <div style={btnWrapper}>
                                             <Link to={`/admin/category/${category.id}/`} className={linkColor}>
                                                 Редактировать
-                                        </Link>
-                                        </Button>
-                                        <Button color='red'>Удалить</Button>
-                                    </div>
-                                </Table.Cell>
-                            </Table.Row>
-                        ))
-                    }
-                </Table.Body>
-                {/* <Table.Footer>
+                                                </Link>
+                                            <DeleteItem fetch={deleteCategory} refetch={getCategories} id={category.id} />
+                                        </div>
+                                    </Table.Cell>
+                                </Table.Row>
+                            ))
+                        }
+                    </Table.Body>
+                    {/* <Table.Footer>
                 <Table.Row>
                     <Table.HeaderCell colSpan='3'>
                         <Menu floated='right' pagination>
@@ -75,7 +74,8 @@ const CategoriesTable = () => {
                     </Table.HeaderCell>
                 </Table.Row>
             </Table.Footer> */}
-            </Table>
+                </Table>
+            </div>
             <CategoryModalAdd />
         </>
     );
