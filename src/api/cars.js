@@ -63,3 +63,14 @@ export function addCar(data) {
                     return err;
                 })
 }
+
+export function addCarGallery(name, gallery) {    
+    console.log(name)
+    const galleryTransform = gallery.map((data, i) => ({
+        picUrl: data[`comment-${i}`]
+    }))
+
+    return axios.post(`${API_URL}/addcargallery/${name}`, galleryTransform)
+                .then(res => res)
+                .catch(err => err)
+}

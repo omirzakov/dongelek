@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Header, Image, Modal, TextArea } from 'semantic-ui-react'
-import { addCategory } from '../../../api/categories';
+import { addCategory, getCategories } from '../../../api/categories';
 
 const initState = {
     name: '',
     description: '',
-    picture: ''
+    picture: '',
+    slug: '',
 }
 
 function CategoryModalAdd() {
@@ -24,8 +25,12 @@ function CategoryModalAdd() {
         const res = await addCategory(category);
         setOpen(false);
         window.location.reload();   
-
     }
+
+    useEffect(async () => {
+        const res = await getCategories();
+        console.log(res)
+    }, [])
 
     return (
         <div style={{ zIndex: 20000, marginTop: 20 }}>
@@ -37,12 +42,15 @@ function CategoryModalAdd() {
             >
                 <Modal.Header>Добавить категорию    </Modal.Header>
                 <Modal.Content image>
-                    <Image size='medium' src='https://lh3.googleusercontent.com/proxy/BSOYR6kSTTbvYkVKBLSYF5G0wEMuE-EvOuXOPhL8-NXA94Kh10PvhfLdkd3cVQE668GteYKcUeiaw24Wqaw' wrapped />
-                    <Modal.Description style={{maxWidth: 500}}>
+                    <Modal.Description style={{maxWidth: 500, margin: "0 auto"}}>
                         <Form onSubmit={handleSubmit} >
                             <Form.Field>
                                 <label>Название</label>
                                 <input placeholder='First Name' name='name' onChange={onChange} value={category.name} />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Slug</label>
+                                <input placeholder='Slug' name='slug' onChange={onChange} value={category.slug} />
                             </Form.Field>
                             <Form.Field label="Описание"
                                 control={TextArea}

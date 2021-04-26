@@ -63,3 +63,24 @@ export function addPublication(data, token) {
                     return err;
                 })
 }
+
+export function userPublication(token) {
+
+    return axios.get(`${API_URL}/userpublications/${token}`)
+                .then(res => res)
+                .catch(err => err);
+}
+
+export function getAllPublicationByCategoryName(name) {
+    console.log(name)
+    return axios.get(`${API_URL}/publicationsbycategory/${name}`)
+                .then(res => res)
+                .catch(err => err)
+}
+
+export function getCarGalleryFetch(id) {
+
+    return axios.get(`${API_URL}/getcargallery/${id}`)
+                .then(res => res)
+                .catch(err => err);
+}

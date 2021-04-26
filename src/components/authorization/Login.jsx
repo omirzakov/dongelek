@@ -24,7 +24,7 @@ const Login = () => {
         toast("Загрузка...")
 
         const res = await login(user);
-        setCookie("token", res.data.token, { maxAge: 3600});
+        setCookie("token", res.data.token, { maxAge: 150000});
 
         if(res.status >= 200 && res.status <= 300) {
             toast.success("Вы успешно зашли в аккаунт");
