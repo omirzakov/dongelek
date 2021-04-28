@@ -3,13 +3,10 @@ import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
 function DeleteItem({ fetch, refetch, id }) {
     const [open, setOpen] = React.useState(false)
-    console.log(fetch)
-    console.log(refetch)
-    console.log(id)
 
     const handleDelete = async () => {
         const res = await fetch(id);
-        window.location.reload();
+        console.log(res)
         setOpen(false);
     }
 

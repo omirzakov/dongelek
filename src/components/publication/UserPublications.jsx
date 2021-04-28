@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Container, Grid, Image, List } from "semantic-ui-react";
-import { userPublication } from "../../api/publications";
+import { deletePublication, userPublication } from "../../api/publications";
 import { AuthContext } from "../../App";
+import DeleteItem from "../general/DeleteItem";
 import ScreenLoader from "../general/ScreenLoader";
 
 
@@ -13,8 +14,9 @@ const UserPublications = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(async () => {
-        if (cookie.token) {
-            const res = await userPublication(cookie.token);
+        const token = localStorage.getItem("jwt");
+        if (token) {
+            const res = await userPublication(token);
             setPublications(res.data);
             setLoading(false);
         }
@@ -26,20 +28,20 @@ const UserPublications = () => {
             {
                 loading ? <ScreenLoader /> :
                     publications.map((publication) => (
-                        <div style={{ marginBottom: 20 }}>
-                            <Link to={`/publication/${publication.id}/`}>
+                        <div key={publication.id} style={{ marginBottom: 20 }}>
                                 <Grid>
                                     <Grid.Column width="2">
+                                        <Link to={`/publication/${publication.id}/`}>
                                         <Image src={publication.picture} size="tiny" />
+                                        </Link>
                                     </Grid.Column>
                                     <Grid.Column width="11">
                                         <h3>{publication.name}</h3>
                                     </Grid.Column>
                                     <Grid.Column width="3">
-                                        <Button secondary>Архивировать</Button>
+                                        <DeleteItem fetch={deletePublication} refetch={userPublication} id={publication.id} />
                                     </Grid.Column>
                                 </Grid>
-                            </Link>
                         </div>
                     ))
             }

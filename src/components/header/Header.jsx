@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { useStyles } from "./styles";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@material-ui/core";
@@ -8,26 +8,40 @@ import "./style.scss";
 import { AuthContext } from "../../App";
 import { validateToken } from "../../api/login";
 import { Container, Menu } from "semantic-ui-react";
+import { getProfile } from "../../api/user";
 
 
 
 const Header = () => {
-    const { cookie, setIsAuth, removeCookie, isAuth } = useContext(AuthContext);
+    const { setIsAuth, removeCookie, isAuth } = useContext(AuthContext);
     const classes = useStyles();
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [profileInfo, setProfileInfo] = useState({});
 
     useEffect(async () => {
-
-        const res = await validateToken(cookie.token);
-        if (res != undefined && res.data) {
+        const token = localStorage.getItem("jwt");
+        if (token) {
             setIsAuth(true);
+            const profile = await getProfile(token);
+            isAdminf();
+            setProfileInfo(profile);
         }
     }, []);
 
     const logOut = () => {
-
-        removeCookie("token");
+        localStorage.removeItem("jwt");
         window.location.reload();
     }
+
+    const isAdminf = () => {
+        console.log(profileInfo)
+
+        // if(isAdminRole) {
+        //     setIsAdmin(true);
+        // }
+    }
+
+    console.log(profileInfo)
 
     return (
         <Menu>
