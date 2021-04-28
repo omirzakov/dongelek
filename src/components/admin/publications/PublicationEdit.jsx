@@ -140,7 +140,9 @@ const PublicationEdit = (props) => {
                             <label>Заголовок</label>
                             <input placeholder='Заголовок' name='name' onChange={onChange} value={publication.name} />
                         </Form.Field>
-
+                        <div>
+                            <img src={publication.picture} width="300px" alt=""/>
+                        </div>
                         <Form.Field>
                             <label>Фото</label>
                             <input placeholder='Фото' name='picture' onChange={onChange} value={publication.picture} />
