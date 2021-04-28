@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
-
-import Navbar from "../navbar/Navbar";
-import CarList from "../cars/CarList";
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import 'swiper/swiper.scss';
-import 'swiper/components/navigation/navigation.scss';
-import 'swiper/components/pagination/pagination.scss';
-import 'swiper/components/scrollbar/scrollbar.scss';
-import { getPublications } from "../../api/publications";
-import { getCategories } from "../../api/categories";
-import { Link, Route, Switch } from "react-router-dom";
-import './style.scss';
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import { Container, Grid } from "semantic-ui-react";
-import PublicationsByCategory from "../publication/PublicationsByCategory";
+import { getCategories } from "../../api/categories";
+import Navbar from "../navbar/Navbar";
+import { getAllPublicationByCategoryName } from "../../api/publications"
+import CarList from "../cars/CarList";
 
-// install Swiper modules
-SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 
-
-const Home = () => {
+const PublicationsByCategory = () => {
+    const { name } = useParams();
     const [publications, setPublications] = useState([]);
     const [categories, setCategories] = useState([]);
 
+
+
     useEffect(async () => {
-        const resPublications = await getPublications();
-        const resCategories = await getCategories();
-        console.log(resPublications)
-        setPublications(resPublications.data);
-        setCategories(resCategories);
+        loadData();
     }, [])
+
+    useEffect(() => {
+        loadData();
+    }, [name]);
+
+    const loadData = async () => {
+        const resCategories = await getCategories();
+        const resPublications = await getAllPublicationByCategoryName(name);
+        setCategories(resCategories);
+        setPublications(resPublications.data);
+    }
 
 
     return (
@@ -42,9 +42,9 @@ const Home = () => {
                     <div className='category-list'>
                         <Link to='/'>Все</Link>
                         {
-                            categories && categories.map((category, i) => (
+                            categories && categories.length > 0 && categories.map((category, i) => (
                                 <Link key={i} to={`/publications/${category.slug}`}>{category.name}</Link>
-                                
+
                             ))
                         }
                     </div>
@@ -54,4 +54,4 @@ const Home = () => {
         </Container>
     );
 }
-export default Home;
+export default PublicationsByCategory;

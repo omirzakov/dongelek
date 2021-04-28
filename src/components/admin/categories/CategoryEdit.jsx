@@ -10,7 +10,8 @@ const pictureNotFound = 'https://www.publicdomainpictures.net/pictures/280000/ve
 const initState = {
     name: '',
     description: '',
-    picture: pictureNotFound
+    picture: pictureNotFound,
+    slug: ''
 }
 
 const CategoryEdit = (props) => {
@@ -27,22 +28,22 @@ const CategoryEdit = (props) => {
     const onChange = (e) => {
         const { value, name } = e.target;
 
-        setCategory({...category, [name] : value});
+        setCategory({ ...category, [name]: value });
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await updateCategory(category); 
+        const res = await updateCategory(category);
 
-        if(res.data === "Success") {
+        if (res.data === "Success") {
             window.location.replace("/admin/categories")
         }
     }
 
 
     return (
-        <div style={{width:"100%", width: 900}}>
-            <Link to="/admin/categories" style={{paddingBottom: 20}}>
+        <div style={{ width: "100%", width: 900 }}>
+            <Link to="/admin/categories" style={{ paddingBottom: 20 }}>
                 Назад
             </Link>
             <Form onSubmit={handleSubmit}>
@@ -50,19 +51,23 @@ const CategoryEdit = (props) => {
                     <label>Название</label>
                     <input placeholder='First Name' name='name' onChange={onChange} value={category.name} />
                 </Form.Field>
+                <Form.Field>
+                    <label>Slug</label>
+                    <input placeholder='Slug' name='slug' onChange={onChange} value={category.slug} />
+                </Form.Field>
                 <Form.Field label="Описание"
-                            control={TextArea}
-                            name='description' 
-                            onChange={onChange} 
-                            value={category.description}
+                    control={TextArea}
+                    name='description'
+                    onChange={onChange}
+                    value={category.description}
                 />
 
                 <Image src={pictureNotFound} size='small' />
-                <Form.Field style={{marginTop:20}}>
+                <Form.Field style={{ marginTop: 20 }}>
                     <label>Фото</label>
                     <input placeholder='First Name' name='picture' onChange={onChange} value={category.picture} />
                 </Form.Field>
-                <Button style={{marginTop:20}} type='submit'>Submit</Button>
+                <Button style={{ marginTop: 20 }} type='submit'>Submit</Button>
             </Form>
         </div>
     )

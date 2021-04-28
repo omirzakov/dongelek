@@ -13,6 +13,8 @@ import Profile from "./components/profile/Profile";
 import AdminPage from "./components/admin/AdminPage";
 import CarDetail from "./components/cars/CarDetail";
 import { useCookies } from "react-cookie";
+import UserPublications from "./components/publication/UserPublications";
+import PublicationsByCategory from "./components/publication/PublicationsByCategory";
 
 export const AuthContext = createContext();
 
@@ -23,16 +25,15 @@ function App() {
 
     return (
         <div className="App">
-            <AuthContext.Provider value={{cookie, setCookie, removeCookie, isAuth, setIsAuth}}>
+            <AuthContext.Provider value={{ cookie, setCookie, removeCookie, isAuth, setIsAuth }}>
                 <Header />
                 <div className="main-wrapper">
                     <Grid container style={{ padding: 30 }}>
                         <Switch>
-                            <Route path="/" exact={true} strict={true}>
+                            <Route path="/" strict={true} exact={true} strict={true}>
                                 <Home />
                             </Route>
                         </Switch>
-
                         <Switch>
                             <Route path="/registration/" exact={true} strict={true}>
                                 <Registration />
@@ -45,7 +46,12 @@ function App() {
                             </Route>
                         </Switch>
                         <Switch>
-                            <Route path="/publication/new/" exact={true} strict={true}>
+                            <Route path="/publication/:id/" exact={true} strict={true}>
+                                <CarDetail />
+                            </Route>
+                        </Switch>
+                        <Switch>
+                            <Route path="/newpublication/" exact={true} strict={true}>
                                 <PublicationForm />
                             </Route>
                         </Switch>
@@ -60,10 +66,13 @@ function App() {
                             </Route>
                         </Switch>
                         <Switch>
-                            <Route path="/cars/:id/" exact={true} strict={true}>
-                                <CarDetail />
+                            <Route path="/mypublications/" exact={true} strict={true}>
+                                <UserPublications />
                             </Route>
                         </Switch>
+                        <Route path="/publications/:name" exact={true} strict={true} >
+                            <PublicationsByCategory />
+                        </Route>
                     </Grid>
                 </div>
                 <Footer />

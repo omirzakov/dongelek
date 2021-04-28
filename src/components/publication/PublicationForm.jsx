@@ -1,158 +1,280 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 
-import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
+import { Box, Button, TextField, Typography } from "@material-ui/core";
 import logo from "../../img/camry.png";
 import "./style.scss";
+import { AuthContext } from '../../App';
+import { getCarMods } from "../../api/carmods";
+import { addCarGallery, getCars } from "../../api/cars";
+import { validateToken } from "../../api/login";
+import { addPublication } from "../../api/publications";
+import { Flag, Form, Grid, Image, TextArea } from 'semantic-ui-react'
+import { ToastContainer, toast } from 'react-toastify';
+
+const years = ['2021', '2020', '2019', '2018', '2017', '2016',
+                '2015', '2014', '2013', '2012', '2011', '2010',
+               '2009', '2008', '2007', '2006', '2005', '2004',
+               '2003', '2002', '2001', '2000', '1999', '1998',
+               '1997', '1996', '1995', '1994', '1993', '1992',
+               '1991', '1990']
 
 
+const initState = {
+    name: '',
+    additional_info: '',
+    contact: '',
+    email: '',
+    price: '',
+    year: '',
+    picture: '',
+    carModifications: [],
+    car: {},
+}
 
 const PublicationForm = () => {
 
+    const [gallery, setGallery] = useState([{['comment-0']: ''}]);
+    const { cookie } = useContext(AuthContext);
+    const [carMod, setCarMod] = useState(initState);
+    const [carMods, setCarMods] = useState([]);
+    const [cars, setCars] = useState([]);
+    const [publication, setPublication] = useState(initState)
 
+    const addComment = () => {
+        if (gallery.length >= 5) {
+            return;
+        }
+        const comment = {
+            [`comment-${gallery.length}`]: ''
+        }
+        const data = [...gallery];
+        data.push(comment);
+        setGallery(data);
+    }
+
+    const handleChange = (e, id) => {
+        console.log(e.target.name, id)
+        setGallery(gallery.map((comment, i) => {
+            if (id == i) {
+                return {
+                    [`comment-${id}`]: e.target.value
+                }
+            }
+
+            return comment;
+        }))
+    }
+
+    const onChange = (e) => {
+        const { value, name } = e.target;
+
+        setPublication({ ...publication, [name]: value });
+    }
+
+    async function loadCarModifications() {
+        const res = await getCarMods();
+        setCarMods(res.data)
+    }
+
+    async function loadCars() {
+        const res = await getCars();
+        setCars(res.data)
+    }
+
+    useEffect(() => {
+        loadCarModifications();
+        loadCars();
+    }, [])
+
+    const selectCarOptions = (data) => {
+        let array = publication.carModifications;
+        const item = array.find(item => item === data);
+
+        if (item) {
+            array = array.filter(mod => mod != data);
+        } else {
+            array.push(data);
+        }
+
+        setPublication({ ...publication, carModifications: array })
+    }
+
+    const selectCar = (carData) => {
+        setPublication({ ...publication, car: carData })
+    }
+
+    const activeCar = (car) => {
+        return publication.car === car ? "active-car" : "";
+    }
+
+    const activeItem = (mod) => {
+        const isExist = publication.carModifications.find(item => item === mod);
+
+        return isExist ? "active-option" : "";
+    }
+
+    const activeYear = (year) => {
+        if(year === publication.year) {
+            return "active-option";
+        }
+
+        return "";
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            if (cookie.token) {
+                const res = await validateToken(cookie.token);
+    
+                if (res.data) {
+                    console.log(publication)
+                    const res1 = await addPublication(publication, cookie.token);
+                    const res2 = await addCarGallery(publication.name, gallery);
+
+                    toast.success('Объявление успешно создана');
+    
+                    setPublication(initState);
+                    setGallery([]);
+    
+                }
+            }
+        } catch(e) {
+            toast.error('Неудалось добавить объявление, проверьте еще раз');
+        }
+    }
+
+    console.log(publication)
 
     return (
 
-        <Grid item xs={12}>
-            <form>
-                <Box component="div" className="form-group" display="flex"
-                    flexDirection="column" alignItems="center" justifyContent="center" marginTop={10}  >
-                    <img src={logo} width="150px" />
-                    <Typography variant="h5">
-                        Новое объявление
-                    </Typography>
-                    <Box maxWidth="550px">
-                        <Box component="div">
-                            <TextField type="text" id="standard-basic" label="Название" style={{ width: "100%", marginBottom: 20 }} />
+        <Form style={{ width: "100%", maxWidth: "1350px", margin: "0 auto" }}>
+            <Grid>
+                <Grid.Column width="7">
+                    <Box component="div">
+                        <Box component="div" className="form-title">
+                            Галерея
+                                </Box>
+                        <Box component="div" marginTop={3}>
+                            {
+                                gallery.map((picture, i) => (
+                                    <TextField required key={i} type="text" onChange={(e) => handleChange(e, i)} value={picture[`comment-${i}`]} placeholder='Дополнительное фото' name={`comment-${i}`} style={{ width: "100%", marginBottom: 20 }} />
+                                ))
+                            }
+                            {
+                                gallery.length < 5 &&
+                                <Button color="primary" onClick={addComment}>Добавить +</Button>
+                            }
                         </Box>
-                        <Box component="div" display="flex">
-                            <Box component="div" className="car-model">
-                                <div>
-                                    <img src="https://cdn.iconscout.com/icon/free/png-512/mercedes-8-202855.png" alt=""/>
-                                </div>
-                                <div>
-                                    Mercedes
-                                </div>
-                            </Box>
-                            <Box component="div" className="car-model">
-                                <div>
-                                    <img src="https://cdn.iconscout.com/icon/free/png-512/toyota-7-827471.png" alt=""/>
-                                </div>
-                                <div>
-                                    Toyota
-                                </div>
-                            </Box>
-                            <Box component="div" className="car-model">
-                                <div>
-                                    <img src="https://img.icons8.com/ios/452/audi.png" alt=""/>
-                                </div>
-                                <div>
-                                    Audi
-                                </div>
-                            </Box>
-                            <Box component="div" className="car-model">
-                                <div>
-                                    <img src="data:image/png;base64,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" alt=""/>
-                                </div>
-                                <div>
-                                    Mitsubishi
-                                </div>
-                            </Box>
-                        </Box>
+                        <div className='gallery-field'>
+                            {
+                                gallery.map((picture, i) => {
+                                    if (picture[`comment-${i}`] === '') {
+                                        return;
+                                    }
 
-                        <Box component="div">
-                            <Box component="div" className="form-title">
-                                Год выпуска
-                            </Box>
-                            <Box component="div" display="flex">
-                                <Box component="div" className="select-btn">
-                                    2021
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    2020
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    2019
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    2018
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    2017
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    2016
-                                </Box>
-                            </Box>
-                        </Box>
-
-                        <Box component="div">
-                            <Box component="div" className="form-title">
-                                Опции автомобиля
-                            </Box>
-                            <Box component="div" display="flex" flexWrap="wrap">
-                                <Box component="div" className="select-btn">
-                                    Ксенон
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    Датчик света
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    Турбонаддув
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    SRS
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    ABS
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    ГУР
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    Мультрируль
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    Подогрев руля
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    Подогрев сидений
-                                </Box>
-                                <Box component="div" className="select-btn">
-                                    Датчик дождя
-                                </Box>
-                            </Box>
-                        </Box>
-
-                        <Box component="div">
-                            <Box component="div" className="form-title">
-                                Галерея
-                            </Box>
-                            <TextField type="text" id="standard-basic" label="Фотография" style={{ width: "100%", marginBottom: 20 }} />
-                            <Button color="primary">Добавить +</Button>
-                        </Box>    
-                        <Box component="div">
-                            <Box component="div" className="form-title">
-                                Комментарий
-                            </Box>
-                            <TextField type="text" id="standard-basic" label="Комментарий" style={{ width: "100%", marginBottom: 20 }} />
-                        </Box>
-                        <Box component="div">
-                            <Box component="div" className="form-title">
-                                Контактный номер
-                            </Box>
-                            <TextField type="text" id="standard-basic" label="Номер телеофна" style={{ width: "100%", marginBottom: 20 }} />
-                        </Box>
-                        <Box component="div">
-                            
-                            <Button variant="contained" color="primary">
-                                Подать объявление
-                            </Button>
-                        </Box>
-
+                                    return <Image style={{ margin: 10 }} key={i} size="small" src={picture[`comment-${i}`]} />
+                                })
+                            }
+                        </div>
                     </Box>
-                </Box>
-            </form>
-        </Grid>
+
+                </Grid.Column>
+                <Grid.Column width="9">.
+                   <h3>Модель</h3>       
+                    <Box component="div" display="flex" flexWrap="wrap" marginTop={5} style={{ marginTop: 10 }}>
+                        {
+                            cars.map(car => (
+                                <Box component="div" className={`car-model ${activeCar(car)}`} onClick={() => selectCar(car)}>
+                                    <div>
+                                        <img src={car.picture} alt="" />
+                                    </div>
+                                    <div>
+                                        {car.name}
+                                    </div>
+                                </Box>
+                            ))
+                        }
+                    </Box>
+
+                    <Box component="div">
+                        <Box component="div" className="form-title">
+                            <h3>Год выпуска</h3>
+                        </Box>
+                        <Box component="div" display="flex" flexWrap="wrap">
+                            {
+                                years.map((year) => (
+                                    <Box component="div" className={`select-btn ${activeYear(year)}`} onClick={() => setPublication({...publication, year: year})} >{year}</Box>
+                                ))
+                            }
+                        </Box>
+                    </Box>
+
+                    <Box component="div">
+                        <Box component="div" className="form-title">
+                            <h3>Опции</h3>
+                        </Box>
+                        <Box component="div" display="flex" flexWrap="wrap">
+                            {
+                                carMods.map((mod) => (
+                                    <Box component="div" className={`select-btn ${activeItem(mod)}`} onClick={() => selectCarOptions(mod)}>
+                                        {mod.modification}
+                                    </Box>
+                                ))
+                            }
+                        </Box>
+                    </Box>
+                    <Box component="div">
+                        <Form.Field>
+                            <h4>Цена в тг &nbsp;
+                                <Flag name="kz" />
+                            </h4>
+                            <input required placeholder='Цена' type="number" name='price' onChange={onChange} value={publication.price} />
+                            <div style={{marginTop: 20, display:"flex"}}>
+                                <div style={{paddingRight:"20px"}}>
+                                    Цена в долларах <Flag name="us" /> = {(publication.price/420).toFixed(2)} $
+                                </div>
+                                <div>
+                                    Цена в евро <Flag name="eu" /> = {(publication.price/520).toFixed(2)} €
+                                </div>
+                            </div>
+                        </Form.Field>
+                    </Box>
+                </Grid.Column>
+                <Grid.Column width="16">
+                    <Form.Field>
+                        <label>Заголовок</label>
+                        <input required placeholder='Заголовок' name='name' onChange={onChange} value={publication.name} />
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Фото</label>
+                        <input required placeholder='Фото' name='picture' onChange={onChange} value={publication.picture} />
+                    </Form.Field>
+
+                    <Form.Field label="Дополнительная информация"
+                        control={TextArea}
+                        name='additional_info'
+                        value={publication.additional_info}
+                        onChange={onChange}
+                    />
+                    <Form.Field>
+                        <label>Контакты</label>
+                        <input required placeholder='Контакты' name='contact' onChange={onChange} value={publication.contact} />
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Почта</label>
+                        <input required placeholder='Почта' name='email' onChange={onChange} value={publication.email} />
+                    </Form.Field>
+                    <Box component="div">
+                        <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
+                            Подать объявление
+                        </Button>
+                    </Box>
+                    <ToastContainer />
+                </Grid.Column>
+            </Grid>
+        </Form>
     );
 }
 export default PublicationForm;

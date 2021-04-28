@@ -25,7 +25,7 @@ const Login = () => {
 
         const res = await login(user);
         console.log(res)
-        setCookie("token", res.data.token, { maxAge: 3600});
+        setCookie("token", res.data.token, { maxAge: 15000000});
 
         if(res.status >= 200 && res.status <= 300) {
             toast.success("Вы успешно зашли в аккаунт");
