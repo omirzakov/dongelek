@@ -57,11 +57,21 @@ const Header = () => {
                             </p>
                         </Menu.Item>
                         :
+                        (
+                        <div style={{display:"flex"}}>
                         <Menu.Item>
-                            <Link to="/registration">
+                            <Link to="/login/">
+                                Логин
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to="/registration/">
                                 Регистрация
                             </Link>
                         </Menu.Item>
+                        </div>
+                        )
+
                 }
             </Container>
         </Menu>

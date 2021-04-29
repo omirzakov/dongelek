@@ -27,6 +27,7 @@ const Home = () => {
         const resPublications = await getPublications();
         const resCategories = await getCategories();
         console.log(resPublications)
+        console.log(resCategories)
         setPublications(resPublications.data);
         setCategories(resCategories);
     }, [])
