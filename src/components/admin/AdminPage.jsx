@@ -24,6 +24,7 @@ import CarModsTable from './carMods/CarModsTable';
 import CarModEdit from './carMods/CarModEdit';
 import PublicationsTable from './publications/PublicationsTable';
 import PublicationEdit from './publications/PublicationEdit'
+import UsersTable from './users/UsersTable';
 const categories = [
     {
         name: "Категории",
@@ -174,6 +175,9 @@ const AdminPage = () => {
                                 </Route>
                                 <Route path='/admin/publications/:id/' exact={true} strict={true}>
                                     <PublicationEdit />
+                                </Route>
+                                <Route path='/admin/users' exact={true} strict={true}>
+                                    <UsersTable />
                                 </Route>
                             </Switch>
                         </main>

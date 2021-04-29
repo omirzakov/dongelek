@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { Box, Button, CircularProgress, Grid, List, ListItem, ListItemText, TextField, Typography } from "@material-ui/core";
-import { validateToken } from "../../api/login";
-import { AuthContext } from "../../App";
-import { getProfile, updatePassword } from "../../api/user";
+import { validateToken } from "../../../api/login";
+import { AuthContext } from "../../../App";
+import { getProfile, updatePassword } from "../../../api/user";
 import { ToastContainer, toast } from "react-toastify";
 
 const initStatePasswords = {
@@ -19,12 +19,12 @@ const Profile = () => {
     const [passData, setPassData] = useState(initStatePasswords);
 
     useEffect(async () => {
-        if(cookie.token) {
-            const res = await validateToken(cookie.token);
+        const token = localStorage.getItem("jwt");
+        if(token) {
+            const res = await validateToken(token);
 
             if(res.data) {
-                const data = await getProfile(cookie.token);
-                console.log(data)
+                const data = await getProfile(token);
                 setUser(data);
                 setLoader(false);
             }

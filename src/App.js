@@ -9,7 +9,7 @@ import Home from "./components/home/Home";
 import Registration from "./components/authorization/Registration";
 import Login from "./components/authorization/Login";
 import PublicationForm from "./components/publication/PublicationForm";
-import Profile from "./components/profile/Profile";
+import Profile from "./components/admin/profile/Profile";
 import AdminPage from "./components/admin/AdminPage";
 import CarDetail from "./components/cars/CarDetail";
 import { useCookies } from "react-cookie";
