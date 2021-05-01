@@ -8,7 +8,7 @@ function DeleteItem({ fetch, refetch, id }) {
         const res = await fetch(id);
         console.log(res)
         setOpen(false);
-        window.location.reload();
+        // window.location.reload();
     }
 
     return (

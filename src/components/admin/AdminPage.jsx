@@ -75,17 +75,17 @@ const useStyles = makeStyles((theme) => ({
 
 const AdminPage = () => {
     const classes = useStyles();
-    const { cookie } = useContext(AuthContext);
     const [loader, setLoader] = useState(true);
 
 
     useEffect(async () => {
-        if (cookie.token) {
-            const userInfo = await getProfile(cookie.token);
+        const token = localStorage.getItem("jwt");
+        if (token) {
+            const userInfo = await getProfile(token);
 
             const isAdmin = userInfo.roles.find((role) => {
 
-                if (role.name === "ROLE_ADMIN") {
+                if (token === "ROLE_ADMIN") {
                     return true;
                 }
             })
@@ -94,11 +94,13 @@ const AdminPage = () => {
                 setLoader(false);
             }
             else {
-                window.location.replace("/");
+                // window.location.replace("/");
             }
+
+            setLoader(false)
         }
         else {
-            window.location.replace("/");
+            // window.location.replace("/");
         }
     }, []);
 

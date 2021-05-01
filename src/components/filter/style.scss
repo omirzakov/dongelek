@@ -1,0 +1,13 @@
+.ui.dropdown .menu>.item>.image, .ui.dropdown .menu>.item>img, .ui.dropdown>.text>.image, .ui.dropdown>.text>img {
+    width: 25px !important;
+}
+
+.ui.selection.dropdown .menu>.item {
+    display: flex;
+    align-items: center;
+}
+
+.ui.fluid.dropdown {
+    display: flex !important;
+    align-items: center !important;
+}

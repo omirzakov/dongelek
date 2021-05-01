@@ -9,6 +9,7 @@ import { AuthContext } from "../../App";
 import { validateToken } from "../../api/login";
 import { Container, Menu } from "semantic-ui-react";
 import { getProfile } from "../../api/user";
+import HeaderSearch from "../search/HeaderSearch";
 
 
 
@@ -35,10 +36,6 @@ const Header = () => {
 
     const isAdminf = () => {
         console.log(profileInfo)
-
-        // if(isAdminRole) {
-        //     setIsAdmin(true);
-        // }
     }
 
     console.log(profileInfo)
@@ -57,33 +54,36 @@ const Header = () => {
                         </Link>
                     </Menu.Item>
                 }
+                <Menu.Item>
+                    <HeaderSearch />
+                </Menu.Item>
                 {
                     isAuth ?
                         <Menu.Item position="right">
-                            <Link to="/mypublications/" style={{paddingRight:"30px", color:"blue"}}>
+                            <Link to="/mypublications/" style={{ paddingRight: "30px", color: "blue" }}>
                                 Мои объявления
                             </Link>
                             <Link to="/profile/">
                                 Профиль
                             </Link>
-                            <p style={{paddingLeft:"30px", color:"green", cursor:"pointer"}} onClick={logOut}>
+                            <p style={{ paddingLeft: "30px", color: "green", cursor: "pointer" }} onClick={logOut}>
                                 Выйти
                             </p>
                         </Menu.Item>
                         :
                         (
-                        <div style={{display:"flex"}}>
-                        <Menu.Item>
-                            <Link to="/login/">
-                                Логин
+                            <div style={{ display: "flex" }}>
+                                <Menu.Item>
+                                    <Link to="/login/">
+                                        Логин
                             </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to="/registration/">
-                                Регистрация
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Link to="/registration/">
+                                        Регистрация
                             </Link>
-                        </Menu.Item>
-                        </div>
+                                </Menu.Item>
+                            </div>
                         )
 
                 }

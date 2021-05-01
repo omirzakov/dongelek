@@ -62,11 +62,12 @@ const CarDetail = () => {
 
 
     const getCurrentUser = async () => {
-        if (cookie.token) {
-            const res = await validateToken(cookie.token);
+        const token = localStorage.getItem("jwt");
+        if (token) {
+            const res = await validateToken(token);
 
             if (res.data) {
-                const data = await getProfile(cookie.token);
+                const data = await getProfile(token);
                 console.log(data)
                 setUser(data);
             }

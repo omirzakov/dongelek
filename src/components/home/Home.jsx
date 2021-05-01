@@ -13,6 +13,7 @@ import { Link, Route, Switch } from "react-router-dom";
 import './style.scss';
 import { Container, Grid } from "semantic-ui-react";
 import PublicationsByCategory from "../publication/PublicationsByCategory";
+import FilterByCarNameAndPrice from "../filter/FilterByCarNameAndPrice";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
@@ -26,8 +27,6 @@ const Home = () => {
     useEffect(async () => {
         const resPublications = await getPublications();
         const resCategories = await getCategories();
-        console.log(resPublications)
-        console.log(resCategories)
         setPublications(resPublications.data);
         setCategories(resCategories);
     }, [])
@@ -49,6 +48,7 @@ const Home = () => {
                             ))
                         }
                     </div>
+                    <FilterByCarNameAndPrice setPublications={setPublications} />
                     <CarList publications={publications} />
                 </Grid.Column>
             </Grid>

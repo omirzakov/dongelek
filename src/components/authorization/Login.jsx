@@ -26,7 +26,7 @@ const Login = () => {
         const res = await login(user);
         console.log(res)
 
-        if(res.status >= 200 && res.status <= 300) {
+        if(res.status && res.status >= 200 && res.status <= 300) {
             toast.success("Вы успешно зашли в аккаунт");
             localStorage.setItem("jwt", res.data.token);
             window.location.replace("/");

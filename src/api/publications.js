@@ -84,3 +84,9 @@ export function getCarGalleryFetch(id) {
                 .then(res => res)
                 .catch(err => err);
 }
+
+export function getPublicationsByModelAndPrice(name, from, to) {
+    return axios.get(`${API_URL}/getpublications/${name}/${from}/${to}`)
+                .then(res => res)
+                .catch(err => err);
+}

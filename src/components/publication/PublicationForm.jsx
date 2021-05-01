@@ -123,20 +123,22 @@ const PublicationForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem("jwt");
 
         try {
-            if (cookie.token) {
-                const res = await validateToken(cookie.token);
+            if (token) {
+                const res = await validateToken(token);
     
                 if (res.data) {
                     console.log(publication)
-                    const res1 = await addPublication(publication, cookie.token);
+                    const res1 = await addPublication(publication, token);
                     const res2 = await addCarGallery(publication.name, gallery);
 
                     toast.success('Объявление успешно создана');
     
                     setPublication(initState);
                     setGallery([]);
+                    window.location.replace("/mypublications/")
     
                 }
             }

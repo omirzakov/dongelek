@@ -50,14 +50,14 @@
 
 .car-mod-list {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .car-mod-item {
-    min-width: 70px;
     text-align: center;
     border-radius: 6px;
     box-shadow: 0px 3px 5px 0px rgba(219, 219, 219, 0.75);
-    margin: 0 5px;
+    margin: 5px;
     border: 1px solid #eee;
     padding: 10px;
 }

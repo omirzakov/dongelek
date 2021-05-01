@@ -33,7 +33,7 @@ const Registration = () => {
         setUser(initState);
 
         setTimeout(() => {
-            window.location.replace("http://localhost:3000/login/");
+            window.location.replace("/login/");
         }, 3000);
     }
 
