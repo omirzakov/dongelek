@@ -101,10 +101,10 @@ function PublicationModalAdd({ loadData }) {
                 <Modal.Content image>
                     <Modal.Description style={{ maxWidth: 800, margin: "0 auto" }}>
                         <Form onSubmit={handleSubmit} >
-                            <Box component="div" display="flex">
+                            <Box component="div" display="flex" flexWrap="wrap">
                             {
                                 cars.map(car => (
-                                    <Box component="div" className={`car-model ${activeCar(car)}`} onClick={() => selectCar(car)}>
+                                    <Box key={car.id} component="div" className={`car-model ${activeCar(car)}`} onClick={() => selectCar(car)}>
                                         <div>
                                             <img src={car.picture} alt="" />
                                         </div>
@@ -118,7 +118,7 @@ function PublicationModalAdd({ loadData }) {
                             <Box component="div" display="flex" flexWrap="wrap">
                                 {
                                     carMods.map((mod) => (
-                                        <Box component="div" className={`select-btn ${activeItem(mod)}`} onClick={() => selectCarOptions(mod)}>
+                                        <Box key={mod.id}  component="div" className={`select-btn ${activeItem(mod)}`} onClick={() => selectCarOptions(mod)}>
                                             {mod.modification}
                                         </Box>
                                     ))
@@ -150,7 +150,7 @@ function PublicationModalAdd({ loadData }) {
                             </Form.Field>
                             <Modal.Actions>
                                 <Button color='black' onClick={() => setOpen(false)}>
-                                    Nope
+                                    Нет
                                 </Button>
                                 <Button
                                     type='submit'
