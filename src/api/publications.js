@@ -90,3 +90,9 @@ export function getPublicationsByModelAndPrice(name, from, to) {
                 .then(res => res)
                 .catch(err => err);
 }
+
+export function addReport(data) {
+    return axios.post(`${API_URL}/addreport`, data)
+                .then(res => res)
+                .catch(err => err);
+}

@@ -25,6 +25,8 @@ import CarModEdit from './carMods/CarModEdit';
 import PublicationsTable from './publications/PublicationsTable';
 import PublicationEdit from './publications/PublicationEdit'
 import UsersTable from './users/UsersTable';
+import ReportsTable from './reports/ReportsTable';
+import BankTable from './bank/BankTable';
 const categories = [
     {
         name: "Категории",
@@ -41,6 +43,14 @@ const categories = [
     {
         name: "Объявления",
         link: "/admin/publications"
+    },
+    {
+        name:"Жалобы",
+        link: "/admin/reports"
+    },
+    {
+        name:"Банковские организации",
+        link: "/admin/banks"
     }
 ]
 
@@ -180,6 +190,12 @@ const AdminPage = () => {
                                 </Route>
                                 <Route path='/admin/users' exact={true} strict={true}>
                                     <UsersTable />
+                                </Route>
+                                <Route path='/admin/reports' exact={true} strict={true}>
+                                    <ReportsTable />
+                                </Route>
+                                <Route path='/admin/banks' exact={true} strict={true}>
+                                    <BankTable />
                                 </Route>
                             </Switch>
                         </main>

@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { List, ListItem, ListItemIcon, ListItemText, Paper } from "@material-ui/core";
 import { useStyles } from "./styles";
-import CommuteIcon from '@material-ui/icons/Commute';
-import LocalTaxiIcon from '@material-ui/icons/LocalTaxi';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import { Link } from "react-router-dom";
 import { navlinks } from "./navlist";
+import { getCars } from "../../api/cars";
+import ModelList from "./ModelList";
 
 
 
@@ -31,6 +30,7 @@ const Navbar = () => {
                     ))
                 }
             </List>
+            <ModelList />
         </Paper >
     );
 

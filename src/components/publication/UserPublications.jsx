@@ -19,6 +19,7 @@ const UserPublications = () => {
             const res = await userPublication(token);
             setPublications(res.data);
             setLoading(false);
+            
         }
     }, []);
 

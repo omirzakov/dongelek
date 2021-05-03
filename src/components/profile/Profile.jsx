@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { Box, Button, CircularProgress, Grid, List, ListItem, ListItemText, TextField, Typography } from "@material-ui/core";
-import { validateToken } from "../../../api/login";
-import { AuthContext } from "../../../App";
-import { getProfile, updatePassword } from "../../../api/user";
+import { validateToken } from "../../api/login";
+import { AuthContext } from "../../App";
+import { getProfile, updatePassword } from "../../api/user";
 import { ToastContainer, toast } from "react-toastify";
+import { Link } from 'react-router-dom';
 
 const initStatePasswords = {
     oldpass: "",
@@ -72,29 +73,18 @@ const Profile = () => {
             loader ? <Box component="div" display="flex" margin="0 auto"><CircularProgress  /></Box>:
             <Grid item xs={7} style={{ margin: "0 auto" }}>
             <Box component="div" marginTop={10} marginLeft={20} >
-                <Box component="div" display="flex" alignItems="center" flexDirection="column" marginTop={10} >
-                    <Box component="div" className="profile-info">
-                        <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" width="150px" alt="User" />
-                    </Box>
-                </Box>
                 <List component="nav" aria-label="secondary mailbox folders">
                     <ListItem button>
                         <ListItemText primary={`Почта: ${user.email}`} />
                     </ListItem>
-                    <ListItem button>
-                        <ListItemText primary={`ФИО: ${user.fullname}`} />
-                    </ListItem>
                 </List>
                 <Box component="div" display="flex" style={{margin: "40px 0"}}>
-                    <Button variant="contained" color="primary" style={{ marginRight: 10 }}>
+                    <Link to="/mypublications/" className="ui blue button">
                         Мои объявления
-                        </Button>
-                    <Button variant="contained" color="primary" style={{ marginRight: 10 }}>
-                        Архив
-                        </Button>
-                    <Button variant="contained" color="primary" style={{ marginRight: 10 }}>
-                        Баланс
-                        </Button>
+                    </Link>
+                    <Link to="/user/credits/" className="ui blue button">
+                        История
+                    </Link>
                 </Box>
                 <form onSubmit={handleSubmit}>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { Box, Button, Grid, Paper } from "@material-ui/core";
+import { Box, Grid, Paper } from "@material-ui/core";
 import "./style.scss";
 import { addComment, getAllCommentsByPublication } from "../../api/comment";
 import { useParams } from "react-router";
@@ -8,8 +8,11 @@ import { AuthContext } from "../../App";
 import { validateToken } from "../../api/login";
 import { getProfile } from "../../api/user";
 import CommentDeleteModal from "./CommentDeleteModal";
-import { Input, List } from "semantic-ui-react";
+import { Button, Header, Input, List } from "semantic-ui-react";
 import { getCarGalleryFetch, getPublication } from "../../api/publications";
+import CarGalleryModal from "./CarGalleryModal";
+import PublicationReport from '../publication/PublicationReport';
+import { Link } from 'react-router-dom';
 
 
 
@@ -98,7 +101,7 @@ const CarDetail = () => {
                 <Grid container>
                     <Grid item xs={5}>
                         <div>
-                            <img src={gallery ? gallery[selected].picUrl : 'nopicture'} style={{ maxWidth: "100%" }} alt="" />
+                            <CarGalleryModal selected={selected} gallery={gallery} />
                         </div>
                         <Grid container>
                             {
@@ -113,42 +116,47 @@ const CarDetail = () => {
                     {
                         publication &&
                         (
-                        <Grid item xs={7} style={{ paddingLeft: 20 }}>
-                            <h2>{publication.name}</h2>
-                            <h3>Цена: {publication.price} тг</h3>
-                            <h3>Год: {publication.year}</h3>
-                            <p className="car-detail-info"><b>Марка</b>: {publication.car.name} </p>
-                            <p className="car-detail-info"><b>Кол-во колес</b>: {publication.car.wheels} штук </p>
-                            <p className="car-detail-info"><b>Кол-во двери</b>: {publication.car.doors} штук</p>
-                            <h3>Дополнительные опции</h3>
-                            <div className="car-mod-list">
-                                {
-                                    publication.carModifications.map((mod, i) => (
-                                        <div className="car-mod-item">
-                                            {mod.modification}
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                            <h3>Контакты:</h3>
-                            <p className="car-detail-info"><b>Мобильный телефон</b>: {publication.contact} </p>
-                            <p className="car-detail-info"><b>Почта</b>: {publication.email} </p>
-                        </Grid>
+                            <Grid item xs={7} style={{ paddingLeft: 20 }}>
+                                <h2>{publication.name}</h2>
+                                <h3>Цена: {publication.price} тг</h3>
+                                <h3>Год: {publication.year}</h3>
+                                <p className="car-detail-info"><b>Марка</b>: {publication.car.name} </p>
+                                <p className="car-detail-info"><b>Кол-во колес</b>: {publication.car.wheels} штук </p>
+                                <p className="car-detail-info"><b>Кол-во двери</b>: {publication.car.doors} штук</p>
+                                <h3>Дополнительные опции</h3>
+                                <div className="car-mod-list">
+                                    {
+                                        publication.carModifications.map((mod, i) => (
+                                            <div className="car-mod-item">
+                                                {mod.modification}
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                                <h3>Контакты:</h3>
+                                <p className="car-detail-info"><b>Мобильный телефон</b>: {publication.contact} </p>
+                                <p className="car-detail-info"><b>Почта</b>: {publication.email} </p>
+                            </Grid>
                         )
                     }
                 </Grid>
                 <Grid container style={{ marginTop: 10 }}>
-                    <Paper>
-                        <Button color="primary"> Позвонить </Button>
-                        <Button color="primary"> Написать сообщение </Button>
-                        <Button color="inherit"> Пожаловаться </Button>
+                    <Paper style={{padding: 20, width:"100%"}}>
+                        {publication && <a href={`tel:${publication.contact || ''}`} style={{paddingRight:10}}>Позвонить</a>}
+                        <PublicationReport user={user} publication={publication} />
+                        {publication && user.id !== publication.user.id && user &&
+                        <Header as="h1">Оформить кредит за 5 минут</Header> }
+                        {publication && user.id !== publication.user.id && 
+                        <Link className="ui green button" to={`/credit/${publication.id}/`}>Оформить</Link>
+                        }
                     </Paper>
                 </Grid>
+
                 <br />
                 {
                     isAuth ? <div>
-                        <Input name='commentText' style={{width:"90%"}} value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder='Комментарий' />
-                        <Button onClick={handleAddComment} color="primary"> Добавить комментарий</Button>
+                        <Input name='commentText' style={{ width: "90%" }} value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder='Комментарий' />
+                        <Button onClick={handleAddComment} color="green" size="tiny" style={{ marginTop: 10 }}> Добавить комментарий</Button>
                     </div> :
                         <div>Чтобы добавить комментарий, войдите в профиль</div>
                 }

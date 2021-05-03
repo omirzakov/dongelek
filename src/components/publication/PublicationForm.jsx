@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { Box, Button, TextField, Typography } from "@material-ui/core";
-import logo from "../../img/camry.png";
+import { Box, Button, TextField } from "@material-ui/core";
 import "./style.scss";
 import { AuthContext } from '../../App';
 import { getCarMods } from "../../api/carmods";
