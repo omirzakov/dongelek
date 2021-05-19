@@ -60,7 +60,7 @@ function HeaderSearch() {
             title: pub.name,
             description: pub.year,
             image: pub.picture,
-            price: pub.price
+            price: `${pub.price} тг`
         }));
         setPublications(options)
     }, [])
@@ -73,7 +73,6 @@ function HeaderSearch() {
     }, [])
 
     useEffect(() => {
-        console.log(publications)
         const res = publications.find((pub) => pub.title === state.value);
 
         if(res) {

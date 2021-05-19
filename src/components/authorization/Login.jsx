@@ -26,10 +26,13 @@ const Login = () => {
         const res = await login(user);
         console.log(res)
 
-        if(res.status && res.status >= 200 && res.status <= 300) {
+        if(res && res.status && res.status >= 200 && res.status <= 300) {
             toast.success("Вы успешно зашли в аккаунт");
             localStorage.setItem("jwt", res.data.token);
             window.location.replace("/");
+        }
+        else {
+            toast.error("Некоректный пароль");
         }
     }
     

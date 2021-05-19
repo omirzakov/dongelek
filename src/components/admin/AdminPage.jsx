@@ -27,6 +27,8 @@ import PublicationEdit from './publications/PublicationEdit'
 import UsersTable from './users/UsersTable';
 import ReportsTable from './reports/ReportsTable';
 import BankTable from './bank/BankTable';
+import { routemap } from './routes';
+
 const categories = [
     {
         name: "Категории",
@@ -51,6 +53,10 @@ const categories = [
     {
         name:"Банковские организации",
         link: "/admin/banks"
+    },
+    {
+        name:"Кредиты",
+        link: "/admin/car/credits"
     }
 ]
 
@@ -92,25 +98,26 @@ const AdminPage = () => {
         const token = localStorage.getItem("jwt");
         if (token) {
             const userInfo = await getProfile(token);
-
+            console.log(userInfo)
             const isAdmin = userInfo.roles.find((role) => {
 
-                if (token === "ROLE_ADMIN") {
+                if (role.id === 2) {
                     return true;
                 }
             })
 
+            console.log(isAdmin)
             if (isAdmin) {
                 setLoader(false);
             }
             else {
-                // window.location.replace("/");
+                window.location.replace("/");
             }
 
             setLoader(false)
         }
         else {
-            // window.location.replace("/");
+            window.location.replace("/");
         }
     }, []);
 
@@ -124,7 +131,10 @@ const AdminPage = () => {
                             <Toolbar>
                                 <Typography variant="h6" noWrap>
                                     Админ панель
-                            </Typography>
+                                </Typography>
+                                <Link to="/" style={{color:"white", fontSize:20, marginLeft:30}}>
+                                    Выйти
+                                </Link>
                             </Toolbar>
                         </AppBar>
                         <Drawer
@@ -152,52 +162,19 @@ const AdminPage = () => {
                                     ))
                                 }
                             </List>
-                            <Divider />
-                            <List>
-                                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                                    <ListItem button key={text}>
-                                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                        <ListItemText primary={text} />
-                                    </ListItem>
-                                ))}
-                            </List>
                         </Drawer>
                         <main className={classes.content}>
-                            <Switch>
-                                <Route path='/admin/categories' exact={true} strict={true}>
-                                    <CategoriesTable />
-                                </Route>
-                                <Route path='/admin/cars' exact={true} strict={true}>
-                                    <CarsTable />
-                                </Route>
-                                <Route path='/admin/category/:id/' exact={true} strict={true}>
-                                    <CategoryEdit />
-                                </Route>
-                                <Route path='/admin/cars/:id/' exact={true} strict={true}>
-                                    <CarEdit />
-                                </Route>
-                                <Route path='/admin/carmods' exact={true} strict={true}>
-                                    <CarModsTable />
-                                </Route>
-                                <Route path='/admin/carmods/:id/' exact={true} strict={true}>
-                                    <CarModEdit />
-                                </Route>
-                                <Route path='/admin/publications' exact={true} strict={true}>
-                                    <PublicationsTable />
-                                </Route>
-                                <Route path='/admin/publications/:id/' exact={true} strict={true}>
-                                    <PublicationEdit />
-                                </Route>
-                                <Route path='/admin/users' exact={true} strict={true}>
-                                    <UsersTable />
-                                </Route>
-                                <Route path='/admin/reports' exact={true} strict={true}>
-                                    <ReportsTable />
-                                </Route>
-                                <Route path='/admin/banks' exact={true} strict={true}>
-                                    <BankTable />
-                                </Route>
-                            </Switch>
+                                {
+                                    routemap.map((route) => (
+                                        <Switch>
+                                        <Route  
+                                                path={route.path}
+                                                component={route.Component}
+                                                exact={route.exact} 
+                                                strict={route.strict} />
+                                        </Switch>
+                                    ))
+                                }
                         </main>
                     </div>
             }

@@ -19,6 +19,8 @@ const Header = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [profileInfo, setProfileInfo] = useState({});
 
+    console.log(process.env.API_URL)
+
     useEffect(async () => {
         const token = localStorage.getItem("jwt");
         if (token) {

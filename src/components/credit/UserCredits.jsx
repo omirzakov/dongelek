@@ -3,6 +3,7 @@ import { Button, Container, Header, Icon, Segment } from "semantic-ui-react";
 import { getCredits } from "../../api/credit";
 import { Link } from 'react-router-dom';
 import "./style.scss";
+import { API_URL } from "../../defroutes/api";
 
 const UserCredits = () => {
     const [credits, setCredits] = useState([]);
@@ -24,7 +25,7 @@ const UserCredits = () => {
                 credits.map((credit, i) => (
                     <div className="credit-item" key={i}>
                         <Icon name='pdf file outline' />
-                        <a href={`http://localhost:8000/download-pdf/${credit.id}`}>Скачать PDF</a>
+                        <a href={`${API_URL}/download-pdf/${credit.id}`}>Скачать PDF</a>
                         <p>{credit.publication.name}</p>
                     </div>
                 ))

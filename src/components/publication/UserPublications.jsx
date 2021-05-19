@@ -19,32 +19,34 @@ const UserPublications = () => {
             const res = await userPublication(token);
             setPublications(res.data);
             setLoading(false);
-            
+
         }
     }, []);
 
     return (
         <Container>
-            <h1>Ваши активные объявления</h1>
+            {
+                publications.length > 0 && <h1>Ваши активные объявления</h1>
+            }
             {
                 loading ? <ScreenLoader /> :
-                    publications.map((publication) => (
+                    publications.length > 0 ? publications.map((publication) => (
                         <div key={publication.id} style={{ marginBottom: 20 }}>
-                                <Grid>
-                                    <Grid.Column width="2">
-                                        <Link to={`/publication/${publication.id}/`}>
+                            <Grid>
+                                <Grid.Column width="2">
+                                    <Link to={`/publication/${publication.id}/`}>
                                         <Image src={publication.picture} size="tiny" />
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column width="11">
-                                        <h3>{publication.name}</h3>
-                                    </Grid.Column>
-                                    <Grid.Column width="3">
-                                        <DeleteItem fetch={deletePublication} refetch={userPublication} id={publication.id} />
-                                    </Grid.Column>
-                                </Grid>
+                                    </Link>
+                                </Grid.Column>
+                                <Grid.Column width="11">
+                                    <h3>{publication.name}</h3>
+                                </Grid.Column>
+                                <Grid.Column width="3">
+                                    <DeleteItem fetch={deletePublication} refetch={userPublication} id={publication.id} />
+                                </Grid.Column>
+                            </Grid>
                         </div>
-                    ))
+                    )) : <h2>У вас нет активных объявлении</h2>
             }
         </Container>
     );
